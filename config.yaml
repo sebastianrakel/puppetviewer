@@ -1,0 +1,4 @@
+---
+PuppetDB:
+  Host: "localhost"
+  Port: 8080
