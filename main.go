@@ -39,10 +39,16 @@ func main() {
 	r.StaticFS("ui/", http.FS(strippedPath))
 
 	r.NoRoute(func(c *gin.Context) {
-		fmt.Println(c.Request.URL.Path)
-		if strings.HasPrefix(c.Request.URL.Path, "/pdb") {
-			c.Next()
-			return
+		skippingPrefixes := []string{
+			"/pdb",
+			"/pv",
+		}
+
+		for _, prefix := range skippingPrefixes {
+			if strings.HasPrefix(c.Request.URL.Path, prefix) {
+				c.Next()
+				return
+			}
 		}
 
 		c.Redirect(http.StatusTemporaryRedirect, "ui/")
@@ -110,5 +116,5 @@ func main() {
 		c.JSON(http.StatusOK, result)
 	})
 
-	r.Run()
+	r.Run(cfg.ListenAddress)
 }

@@ -79,6 +79,9 @@ module.exports = configure(function (/* ctx */) {
       // extendViteConf (viteConf) {},
       // viteVuePluginOptions: {},
 
+      env: {
+        VUE_APP_BACKEND_BASE_ADDRESS: process.env.VUE_APP_BACKEND_BASE_ADDRESS || ''
+      },
       vitePlugins: [
         ['@intlify/vite-plugin-vue-i18n', {
           // if you want to use Vue I18n Legacy API, you need to set `compositionOnly: false`

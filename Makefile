@@ -6,6 +6,13 @@ ui:
 server:
 	go build -o puppetviewer
 
+develop-frontend:
+	cd ui/puppetviewer-frontend; \
+	VUE_APP_BACKEND_BASE_ADDRESS=http://localhost:8081 yarn quasar dev
+
+develop-backend:
+	air
+
 all: ui server
 
 clean:
