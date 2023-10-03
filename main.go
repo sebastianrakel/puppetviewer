@@ -2,7 +2,9 @@ package main
 
 import (
 	"fmt"
+	"io/fs"
 	"net/http"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 	"github.com/sebastianrakel/puppetviewer/config"
@@ -31,6 +33,19 @@ func main() {
 		}
 
 		c.Next()
+	})
+
+	strippedPath, _ := fs.Sub(uiFS, "ui/puppetviewer-frontend/dist/spa")
+	r.StaticFS("ui/", http.FS(strippedPath))
+
+	r.NoRoute(func(c *gin.Context) {
+		fmt.Println(c.Request.URL.Path)
+		if strings.HasPrefix(c.Request.URL.Path, "/pdb") {
+			c.Next()
+			return
+		}
+
+		c.Redirect(http.StatusTemporaryRedirect, "ui/")
 	})
 
 	r.POST("/pdb/query", func(c *gin.Context) {
